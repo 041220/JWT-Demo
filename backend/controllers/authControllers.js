@@ -135,10 +135,8 @@ const authController = {
         refreshTokens = refreshTokens.filter(token => token !== req.cookies.refreshToken);
         res.status(200).json("Logged out !");
     },
-    sendResetPasswordMail: async (username, email, token) => {
-        console.log("checked:", username);
-        console.log("checked2:", email);
-        console.log("checked3:", token);
+    sendResetPasswordMail: async (username, email, id) => {
+
         try {
             const transporter = nodemailer.createTransport({
                 host: process.env.SMTP_HOST,
@@ -153,7 +151,7 @@ const authController = {
                 from: process.env.SMTP_USERNAME,
                 to: email,
                 subject: 'For reset password',
-                html: '<p> Hii ' + username + ' Plese copy the link <a href="http://localhost:3000/reset-password?token=' + token + '">  Reset your password </a>'
+                html: '<p> Hii ' + username + ' Plese copy the link <a href="http://localhost:3000/reset-password/' + id + '">  Reset your password </a>'
             }
             console.log("mailoptions", mailOptions);
             return transporter.sendMail(mailOptions, function (info, error) {
@@ -175,8 +173,8 @@ const authController = {
 
             if (dataUser) {
                 const randomString = randomstring.generate();
-                const data = await User.updateOne({ email: email }, { $set: { token: randomString } })
-                authController.sendResetPasswordMail(dataUser.username, dataUser.email, randomString);
+                const data = await User.updateOne({ email: email })
+                authController.sendResetPasswordMail(dataUser.username, dataUser.email, dataUser._id);
                 res.status(200).send({ success: true, msg: "Plese check email and reset password", data: data })
 
             }
@@ -185,29 +183,28 @@ const authController = {
 
             }
         } catch (error) {
-            res.status(400).send({ succes: false, msg: error.message })
+            res.status(400).send({ success: false, msg: error.message })
         }
     },
     reset_password: async (req, res) => {
         try {
+            const id = req.params.id;
             const salt2 = await bcrypt.genSalt(10);
+            const hashedNewPassword = await bcrypt.hash(req.body.password, salt2);
 
-            const token = req.query.token;
-            const password = req.body.password;
-
-            const hashedNewPassword = await bcrypt.hash(password, salt2);
-
-            const tokenData = await User.findOne({ token: token });
-            if (tokenData) {
-                const userData = await User.findByIdAndUpdate({ _id: tokenData.id }, { $set: { password: hashedNewPassword, token: '' } }, { new: true })
-                res.status(200).send({ success: true, msg: "User Password has been reset", data: tokenData })
+            const idData = await User.findOne({ _id: id });
+            console.log("data:", idData);
+            if (idData) {
+                const userData = await User.findByIdAndUpdate({ _id: idData.id }, { $set: { password: hashedNewPassword } }, { new: true })
+                res.status(200).send({ success: true, msg: "User Password has been reset", data: userData })
             }
             else {
                 res.status(200).send({ success: false, msg: "This link has been exprired." })
             }
 
         } catch (error) {
-            res.status(400).send({ succes: false, msg: error.message });
+            res.status(400).send({ success: false, msg: error.message });
+            console.log(error);
         }
     }
 };

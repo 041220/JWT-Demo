@@ -1,15 +1,15 @@
 .root-login {
   width: 100%;
   height: calc(100vh - 40px);
-  backdrop-filter: blur(4px);
+  /* backdrop-filter: blur(4px); */
 }
 
 .login-container {
   width: 400px;
   margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.936);
+  background-color: rgba(212, 206, 190, 0.9);
   padding: 20px;
-  box-shadow: 0 0 5px 1px #bfbfbf;
+  box-shadow: 0 0 5px 1px #edebeb;
   border-radius: 5px;
   margin-top: 50px;
   /* background-image: url(./Security.jpeg); */
@@ -31,12 +31,23 @@
   align-items: flex-start;
 }
 
-
-
-
 .login-register {
   margin: 2rem 1rem 0 1rem;
   font-size: 1rem;
+}
+
+.forgot-password {
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  color: rgb(105, 105, 105);
+  font-size: 17px;
+  font-weight: 400;
+  align-items: flex-end;
+}
+
+.forgot-password:hover {
+  font-weight: 700;
 }
 
 .login-register-link {
@@ -44,7 +55,11 @@
   cursor: pointer;
   margin-top: 1rem;
   color: rgb(105, 105, 105);
-  font-weight: 700;
+  font-weight: 500;
+}
+
+.login-register-link:hover {
+  font-weight: 600;
 }
 
 button {
@@ -57,4 +72,9 @@ button {
   border-radius: 4px;
   color: white;
   background-color: rgb(161, 161, 161);
+}
+
+button:hover {
+  font-weight: 550;
+  box-shadow: inset;
 }

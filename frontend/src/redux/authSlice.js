@@ -18,10 +18,15 @@ const authSlice = createSlice({
             currentEmail: false,
             error: false,
         },
-        resetPassword: {
+        newPassword: {
             isFetching: false,
             passwordReset: null,
-            error: false
+            error: false,
+        },
+        passwordChanged: {
+            isFetching: false,
+            passwordReset: null,
+            error: false,
         }
     },
     reducers: {
@@ -64,19 +69,32 @@ const authSlice = createSlice({
             state.forgotPassword.success = false;
         },
         resetPasswordStart: (state) => {
-            console.log("state:", state);
-            state.resetPassword.isFetching = true;
+            state.newPassword.isFetching = true;
         },
         resetPasswordSuccess: (state, action) => {
-            state.resetPassword.isFetching = false;
-            state.resetPassword.error = false;
-            state.resetPassword.passwordReset = action.payload;
+            state.newPassword.isFetching = false;
+            state.newPassword.error = false;
+            state.newPassword.passwordReset = action.payload;
         },
         resetPasswordFailed: (state) => {
-            state.resetPassword.isFetching = false;
-            state.resetPassword.error = true;
-            state.resetPassword.passwordReset = null;
+            state.newPassword.isFetching = false;
+            state.newPassword.error = true;
+            state.newPassword.passwordReset = null;
         },
+        changePasswordStart: (state) => {
+            state.passwordChanged.isFetching = true;
+        },
+        changePasswordSuccess: (state, action) => {
+            state.passwordChanged.isFetching = false;
+            state.passwordChanged.error = false;
+            state.passwordChanged.passwordReset = action.payload;
+        },
+        changePasswordFailed: (state) => {
+            state.passwordChanged.isFetching = false;
+            state.passwordChanged.error = true;
+            state.passwordChanged.passwordReset = null;
+        },
+
 
         logOutSuccess: (state) => {
             state.login.isFetching = false;
@@ -109,7 +127,10 @@ export const {
     forgotPasswordFailed,
     resetPasswordStart,
     resetPasswordSuccess,
-    resetPasswordFailed
+    resetPasswordFailed,
+    changePasswordStart,
+    changePasswordSuccess,
+    changePasswordFailed,
 
 } = authSlice.actions;
 

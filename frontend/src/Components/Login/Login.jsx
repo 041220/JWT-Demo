@@ -32,7 +32,7 @@ const Login = () => {
             onChange={(e) => setUsername(e.target.value)}
             fullWidth
             label="Username"
-            style={{ marginTop: '10px' }} />
+            style={{ marginTop: '10px', backgroundColor: 'rgba(212, 206, 190, 0.9)' }} />
 
           <TextField
             type="password"
@@ -40,16 +40,16 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             fullWidth
             label="Password"
-            style={{ marginTop: '20px' }} />
+            style={{ marginTop: '20px', backgroundColor: 'rgba(212, 206, 190, 0.9)' }} />
 
           <Link className="forgot-password" to="/forgot-password">
             Forgot password
           </Link>
-          <button className="btn-continue" type="submit"> Continue </button>
+          <button className="btn-continue" type="submit"> Login </button>
         </form>
         <div className="login-register"> Don't have an account yet? </div>
         <Link className="login-register-link" to="/register">
-          Register one for free
+          Create account free
         </Link>
       </section>
     </div>

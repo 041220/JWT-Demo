@@ -1,5 +1,10 @@
 import axios from "axios";
+
+
 import {
+    changePasswordFailed,
+    changePasswordStart,
+    changePasswordSuccess,
     forgotPasswordFailed,
     forgotPasswordStart,
     forgotPasswordSuccess,
@@ -12,6 +17,7 @@ import {
     registerFailed,
     registerStart,
     registerSuccess,
+    resetPasswordFailed,
     resetPasswordStart,
     resetPasswordSuccess,
 } from "./authSlice";
@@ -54,26 +60,39 @@ export const forgotPassword = async (email, dispatch, navigate, setCheckEmail) =
         dispatch(forgotPasswordSuccess(res.data));
         if (res.data.success === true) {
             alert(res.data.msg)
+
         }
         else {
             alert("Email khong chinh xac")
-            setCheckEmail("")
         }
     } catch (error) {
         console.log(error);
         dispatch(forgotPasswordFailed())
     }
 };
-export const resetPassword = async (newPassword, dispatch, navigate) => {
+export const resetPassword = async (newPassword, dispatch, navigate, id) => {
+
     dispatch(resetPasswordStart());
     try {
-        const res = await axios.post(`/v1/auth/reset-password`, { password: newPassword });
-        dispatch(resetPasswordSuccess())
+        const res = await axios.post(`/v1/auth/reset-password/${id}`, { password: newPassword });
+        dispatch(resetPasswordSuccess(res.data))
+        navigate("/login")
     } catch (error) {
-        dispatch(registerFailed())
+        dispatch(resetPasswordFailed())
     }
+};
+export const changePassword = async (changedPassword, dispatch, navigate, id) => {
+    console.log("id:", id);
+    dispatch(changePasswordStart());
+    try {
+        const res = await axios.post(`/v1/auth/reset-password/${id}`, { password: changedPassword });
+        dispatch(changePasswordSuccess(res.data))
+        navigate("/login")
+    } catch (error) {
+        dispatch(changePasswordFailed())
+    }
+};
 
-}
 export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
     dispatch(getUsersStart());
     try {
@@ -91,6 +110,7 @@ export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
         const res = await axiosJWT.delete("/v1/user/" + id, {
             headers: { token: `Bearer ${accessToken}` },
         });
+        console.log("data:", res.data);
         dispatch(deleteUserSuccess(res.data));
     } catch (err) {
         dispatch(deleteUserFailed(err.response.data));
