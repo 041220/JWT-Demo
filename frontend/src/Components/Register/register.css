@@ -1,0 +1,22 @@
+.register-container {
+  width: 500px;
+  margin: 0 auto;
+  background-color: rgba(212, 206, 190, 0.9);
+  padding: 20px;
+  box-shadow: 0 0 5px 2px #bfbfbf;
+  border-radius: 5px;
+  margin-top: 50px;
+}
+
+
+.register-title {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.register-error {
+  margin-top: 1rem;
+  align-self: center;
+  color: rgb(255, 0, 55);
+}
