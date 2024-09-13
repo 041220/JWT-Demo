@@ -28,9 +28,8 @@ const HomePage = () => {
     if (user?.accessToken) {
       getAllUsers(user?.accessToken, dispatch, axiosJWT);
     }
-  }, [user]);
+  }, [user, dispatch, axiosJWT, navigate]);
 
-  console.log("userchecked:", user);
   const checkRole = (id) => {
     if (user.admin) {
       return (
