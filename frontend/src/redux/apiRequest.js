@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 import {
     changePasswordFailed,
     changePasswordStart,
@@ -29,12 +28,14 @@ import {
     getUsersStart,
     getUsersSuccess,
 } from "./userSlice";
-//npm install axios
 
+const API_BASE_URL = process.env.NODE_ENV === 'production'
+    ? 'https://jwt-demo-dzyr.onrender.com'
+    : 'http://localhost:8000';
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        const res = await axios.post("/v1/auth/login", user);
+        const res = await axios.post(`${API_BASE_URL}/v1/auth/login`, user);
         dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (err) {
@@ -45,7 +46,7 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart());
     try {
-        await axios.post("/v1/auth/register", user);
+        await axios.post(`${API_BASE_URL}/v1/auth/register`, user);
         dispatch(registerSuccess());
         navigate("/login");
     } catch (err) {
@@ -55,7 +56,7 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const forgotPassword = async (email, dispatch, navigate, setCheckEmail) => {
     dispatch(forgotPasswordStart());
     try {
-        const res = await axios.post("/v1/auth/forgot-password", { email });
+        const res = await axios.post(`${API_BASE_URL}/v1/auth/forgot-password`, { email });
         console.log("res", res.data);
         dispatch(forgotPasswordSuccess(res.data));
         if (res.data.success === true) {
@@ -74,7 +75,7 @@ export const resetPassword = async (newPassword, dispatch, navigate, id) => {
 
     dispatch(resetPasswordStart());
     try {
-        const res = await axios.post(`/v1/auth/reset-password/${id}`, { password: newPassword });
+        const res = await axios.post(`${API_BASE_URL}/v1/auth/reset-password/${id}`, { password: newPassword });
         dispatch(resetPasswordSuccess(res.data))
         navigate("/login")
     } catch (error) {
@@ -84,7 +85,7 @@ export const resetPassword = async (newPassword, dispatch, navigate, id) => {
 export const changePassword = async (changedPassword, dispatch, navigate, id) => {
     dispatch(changePasswordStart());
     try {
-        const res = await axios.post(`/v1/auth/reset-password/${id}`, { password: changedPassword });
+        const res = await axios.post(`${API_BASE_URL}/v1/auth/reset-password/${id}`, { password: changedPassword });
         dispatch(changePasswordSuccess(res.data))
         navigate("/login")
     } catch (error) {
@@ -95,7 +96,7 @@ export const changePassword = async (changedPassword, dispatch, navigate, id) =>
 export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
     dispatch(getUsersStart());
     try {
-        const res = await axiosJWT.get("/v1/user", {
+        const res = await axiosJWT.get(`${API_BASE_URL}/v1/user`, {
             headers: { token: `Bearer ${accessToken}` },
         });
         dispatch(getUsersSuccess(res.data));
