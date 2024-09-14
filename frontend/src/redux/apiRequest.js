@@ -82,7 +82,6 @@ export const resetPassword = async (newPassword, dispatch, navigate, id) => {
     }
 };
 export const changePassword = async (changedPassword, dispatch, navigate, id) => {
-    console.log("id:", id);
     dispatch(changePasswordStart());
     try {
         const res = await axios.post(`/v1/auth/reset-password/${id}`, { password: changedPassword });

@@ -12,10 +12,7 @@ const ChangePassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    console.log("user2:", user._id);
-
     const handleChangePassword = () => {
-        console.log("newPass:", passwordChanged);
         changePassword(passwordChanged, dispatch, navigate, user._id)
     }
 
