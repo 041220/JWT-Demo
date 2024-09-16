@@ -53,7 +53,7 @@ const authController = {
                 admin: user.admin,
             },
             process.env.JWT_ACCESS_KEY,
-            { expiresIn: "15s" }
+            { expiresIn: "30d" }
         );
     },
     //GENERATE REFRESH TOKEN
@@ -104,7 +104,6 @@ const authController = {
 
     requestRefreshToken: async (req, res) => {
         const refreshToken = req.cookies.refreshToken;
-        console.log("req.cookies", req.cookies);
 
         if (!refreshToken) return res.status(401).json("You're not authenticated");
         if (!refreshTokens.includes(refreshToken)) {
