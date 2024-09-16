@@ -11,7 +11,6 @@ const ForgotPassword = () => {
     const navigate = useNavigate();
 
     const handleFindEmail = () => {
-        console.log("checkemail:", checkEmail);
         forgotPassword(checkEmail, dispatch, navigate, setCheckEmail);
     }
     return (

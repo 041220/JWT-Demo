@@ -14,9 +14,8 @@ mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTop
     .catch((error) => console.log("Failed to connect to MongoDB", error));
 
 const corsOptions = {
-    origin: "*",
+    origin: "http://localhost:3000",
     credentials: true,
-    optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 

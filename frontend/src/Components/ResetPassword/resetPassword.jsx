@@ -11,12 +11,9 @@ const ResetPassword = (userList) => {
     const navigate = useNavigate();
 
     const param = useParams();
-    console.log("param:", param);
     const handleResetPassword = () => {
-        console.log("newPass:", newPassword);
         resetPassword(newPassword, dispatch, navigate, param.id)
     }
-    console.log("userList", userList.userList);
 
     return (
 

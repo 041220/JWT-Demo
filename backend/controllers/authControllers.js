@@ -31,7 +31,6 @@ const authController = {
 
         } catch (err) {
             res.status(500).json(err);
-            console.log("err", err);
         }
     },
 
@@ -54,7 +53,7 @@ const authController = {
                 admin: user.admin,
             },
             process.env.JWT_ACCESS_KEY,
-            { expiresIn: "30s" }
+            { expiresIn: "15s" }
         );
     },
     //GENERATE REFRESH TOKEN
@@ -104,7 +103,6 @@ const authController = {
     },
 
     requestRefreshToken: async (req, res) => {
-        //Take refresh token from user
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) return res.status(401).json("You're not authenticated");
         if (!refreshTokens.includes(refreshToken)) {
@@ -153,10 +151,8 @@ const authController = {
                 subject: 'For reset password',
                 html: '<p> Hii ' + username + ' Plese copy the link <a href="http://localhost:3000/reset-password/' + id + '">  Reset your password </a>'
             }
-            console.log("mailoptions", mailOptions);
             return transporter.sendMail(mailOptions, function (info, error) {
                 if (info) {
-                    console.log("Mail has been sent:- ", info.response);
                 }
                 else {
                     console.log(error);
@@ -193,7 +189,6 @@ const authController = {
             const hashedNewPassword = await bcrypt.hash(req.body.password, salt2);
 
             const idData = await User.findOne({ _id: id });
-            console.log("data:", idData);
             if (idData) {
                 const userData = await User.findByIdAndUpdate({ _id: idData.id }, { $set: { password: hashedNewPassword } }, { new: true })
                 res.status(200).send({ success: true, msg: "User Password has been reset", data: userData })
@@ -244,74 +239,74 @@ module.exports = authController;
 
 
 
- // getResetPasswordToken: (user) => {
-    //     // const resetToken = await crypto.randomBytes(20).toString('hex');
-    //     const resetToken = crypto.randomBytes(20).toString('hex');
-    //     console.log("resetToken", resetToken);
-    //     //hash token and set to resetpasswordToken feild
-    //     this.resetPasswordToken = crypto
-    //         .createHash('sha256')
-    //         .update(resetToken)
-    //         .digest('hex');
-    //     //set expire
-    //     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+// getResetPasswordToken: (user) => {
+//     // const resetToken = await crypto.randomBytes(20).toString('hex');
+//     const resetToken = crypto.randomBytes(20).toString('hex');
+//     console.log("resetToken", resetToken);
+//     //hash token and set to resetpasswordToken feild
+//     this.resetPasswordToken = crypto
+//         .createHash('sha256')
+//         .update(resetToken)
+//         .digest('hex');
+//     //set expire
+//     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
-    //     return resetToken;
-    // },
-    // forgotPassword: async (req, res, next) => {
-    //     const user = await User.findOne({ email: req.body.email });
+//     return resetToken;
+// },
+// forgotPassword: async (req, res, next) => {
+//     const user = await User.findOne({ email: req.body.email });
 
-    //     if (!user) {
-    //         return next(new ErrorResponse(`There is no user with that email`, 404))
-    //     }
+//     if (!user) {
+//         return next(new ErrorResponse(`There is no user with that email`, 404))
+//     }
 
-    //     const resetToken = authController.getResetPasswordToken()
+//     const resetToken = authController.getResetPasswordToken()
 
-    //     await user.save({ validateBeforeSave: false })
+//     await user.save({ validateBeforeSave: false })
 
-    //     //create reset url
-    //     const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
+//     //create reset url
+//     const resetUrl = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`
 
-    //     const message = `You are receiving this email because you (or someone else) has requested the reset of a password`
+//     const message = `You are receiving this email because you (or someone else) has requested the reset of a password`
 
-    //     try {
-    //         await sendEmail({
-    //             email: user.email,
-    //             subject: 'Password reset token',
-    //             message
-    //         })
-    //         res.status(200).json({ success: true, data: 'email sent' });
+//     try {
+//         await sendEmail({
+//             email: user.email,
+//             subject: 'Password reset token',
+//             message
+//         })
+//         res.status(200).json({ success: true, data: 'email sent' });
 
-    //     } catch (error) {
-    //         console.log(error);
-    //         user.getResetPasswordToken = undefined;
-    //         user.resetPasswordExpire = undefined;
+//     } catch (error) {
+//         console.log(error);
+//         user.getResetPasswordToken = undefined;
+//         user.resetPasswordExpire = undefined;
 
-    //         await user.save({ validateBeforeSave: false })
+//         await user.save({ validateBeforeSave: false })
 
-    //         return next(new ErrorResponse('Email could not be sent', 500))
-    //     }
-    // },
-    // resetPassword: async (req, res, next) => {
-    //     const resetPasswordToken = crypto
-    //         .createHash('sha256')
-    //         .update(req.params.resetToken)
-    //         .digest('hex');
+//         return next(new ErrorResponse('Email could not be sent', 500))
+//     }
+// },
+// resetPassword: async (req, res, next) => {
+//     const resetPasswordToken = crypto
+//         .createHash('sha256')
+//         .update(req.params.resetToken)
+//         .digest('hex');
 
-    //     const user = await User.findOne({
-    //         resetPasswordToken,
-    //         resetPasswordExpire: { $gt: Date.now() }
-    //     })
-    //     if (!user) {
-    //         return next(new ErrorResponse(`Invalid token`, 400));
+//     const user = await User.findOne({
+//         resetPasswordToken,
+//         resetPasswordExpire: { $gt: Date.now() }
+//     })
+//     if (!user) {
+//         return next(new ErrorResponse(`Invalid token`, 400));
 
-    //     }
+//     }
 
-    //     user.password = req.body.password;
-    //     user.resetPasswordToken = undefined;
-    //     user.resetPasswordExpire = undefined;
-    //     await user.save();
+//     user.password = req.body.password;
+//     user.resetPasswordToken = undefined;
+//     user.resetPasswordExpire = undefined;
+//     await user.save();
 
-    //     const id = user.getId();
-    //     sendTokenResponse(user, 200, res, id)
-    // }
+//     const id = user.getId();
+//     sendTokenResponse(user, 200, res, id)
+// }

@@ -1,9 +1,12 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
+const API_BASE_URL = process.env.NODE_ENV === 'production'
+  ? 'https://jwt-demo-dzyr.onrender.com'
+  : 'http://localhost:8000';
 const refreshToken = async () => {
   try {
-    const res = await axios.post("/v1/auth/refresh", {
+    const res = await axios.post(`${API_BASE_URL}/v1/auth/refresh`, {}, {
       withCredentials: true,
     });
     return res.data;
